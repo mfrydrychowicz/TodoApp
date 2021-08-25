@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>images/baseline_add_black_20.png</file>
+        <file>images/baseline_delete_black_20.png</file>
+    </qresource>
+</RCC>
