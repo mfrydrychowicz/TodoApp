@@ -29,6 +29,11 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
+        todo/ToDoModel.cpp
+        todo/ToDoModel.h
+        todo/ToDoList.cpp
+        todo/ToDoList.h
+        todo/ToDoItem.h
         qml.qrc
         icons.qrc
         fonts.qrc
