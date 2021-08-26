@@ -28,8 +28,17 @@ ListView {
 
         Pane {
             id: todoItem
-            implicitWidth: Math.max(todoLabel.implicitWidth + 20, todoDetails.implicitWidth + 20)
-            implicitHeight: todoLabel.implicitHeight + 20 + todoDetails.implicitHeight + separator.implicitHeight + 20
+            implicitWidth: 200
+            implicitHeight: calculateHeight()
+
+            function calculateHeight() {
+                var height = todoLabel.implicitHeight + 20
+                if (model.details.length > 0) {
+                    height = height + todoDetails.implicitHeight + separator.implicitHeight + 20
+                }
+                return height
+            }
+
             background: Rectangle {
                 id: paneBackground
                 border.width: 1
@@ -40,7 +49,7 @@ ListView {
             Label {
                 id: todoLabel
                 text: model.label
-                wrapMode: Text.WrapAnywhere
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
 
             ToolSeparator {
@@ -49,14 +58,19 @@ ListView {
                 anchors.top: todoLabel.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
+                visible: model.details.length > 0
             }
 
             Text {
-                padding: 10
+                leftPadding: 10
+                rightPadding: 10
                 id: todoDetails
+                font.pointSize: 10
                 text: model.details
                 anchors.top: separator.bottom
-                wrapMode: Text.WrapAnywhere
+                width: parent.width - 20
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                visible: model.details.length > 0
             }
         }
 

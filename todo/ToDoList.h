@@ -12,6 +12,7 @@ class ToDoList : public QObject
 public:
     explicit ToDoList(QObject *parent = nullptr);
     QVector<ToDoItem> getItems() const;
+    bool updateItemAt(int index, const ToDoItem &item);
 
 private:
     QVector<ToDoItem> m_items;

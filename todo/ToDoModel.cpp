@@ -2,6 +2,7 @@
 
 ToDoModel::ToDoModel(QObject *parent)
     : QAbstractListModel(parent)
+    , m_list(nullptr)
 {
 }
 
@@ -27,7 +28,7 @@ int ToDoModel::rowCount(const QModelIndex &parent) const
     if (parent.isValid())
         return 0;
 
-    // FIXME: Implement me!
+    return m_list->getItems().size();
 }
 
 QVariant ToDoModel::data(const QModelIndex &index, int role) const
@@ -35,7 +36,17 @@ QVariant ToDoModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    // FIXME: Implement me!
+
+    const ToDoItem item = m_list->getItems().at(index.row());
+    switch (role) {
+    case DoneRole:
+        return QVariant(item.done);
+    case DetailsRole:
+        return QVariant(item.details);
+    case LabelRole:
+        return QVariant(item.label);
+    }
+
     return QVariant();
 }
 
@@ -86,16 +97,16 @@ void ToDoModel::setList(ToDoList *list)
             const int index = m_list->getItems().size();
             beginInsertRows(QModelIndex(), index, index);
         });
-//        connect(m_list, &ToDoList::postItemAppended, this, [=]() {
-//            endInsertRows();
-//        });
+        connect(m_list, &ToDoList::todoItemAdditionEnd, this, [=]() {
+            endInsertRows();
+        });
 
-//        connect(m_list, &ToDoList::preItemRemoved, this, [=](int index) {
-//            beginRemoveRows(QModelIndex(), index, index);
-//        });
-//        connect(m_list, &ToDoList::postItemRemoved, this, [=]() {
-//            endRemoveRows();
-//        });
+        connect(m_list, &ToDoList::todoItemRemovalStart, this, [=](int index) {
+            beginRemoveRows(QModelIndex(), index, index);
+        });
+        connect(m_list, &ToDoList::todoItemRemovalEnd, this, [=]() {
+            endRemoveRows();
+        });
     }
 
     endResetModel();

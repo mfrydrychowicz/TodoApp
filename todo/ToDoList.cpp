@@ -13,6 +13,21 @@ QVector<ToDoItem> ToDoList::getItems() const
     return m_items;
 }
 
+bool ToDoList::updateItemAt(int index, const ToDoItem &item)
+{
+    bool result = false;
+    if (index > 0 || index < m_items.size()) {
+        const ToDoItem &currentItem = m_items.at(index);
+        if (false == (item.done == currentItem.done &&
+            item.details == currentItem.details &&
+            item.label == currentItem.label))
+        {
+            m_items[index] = item;
+        }
+    }
+    return result;
+}
+
 void ToDoList::addItem()
 {
     emit todoItemAdditionStart();
