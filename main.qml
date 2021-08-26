@@ -1,13 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
-import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
-import QtGraphicalEffects 1.0
-import QtQuick.Controls.Material.impl 2.12
 import QtQuick.Controls.Universal 2.12
-import QtQuick.Controls.Styles 1.4
-
 import "ToDo"
 
 ApplicationWindow {
@@ -21,7 +16,7 @@ ApplicationWindow {
         Layout.fillWidth: true
         height: 50
         background: Rectangle {
-            color: "green"
+            color: Universal.color(Universal.Emerald)
             opacity: 0.7
         }
 
