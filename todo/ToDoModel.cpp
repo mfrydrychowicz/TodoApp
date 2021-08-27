@@ -2,13 +2,23 @@
 
 ToDoModel::ToDoModel(QObject *parent)
     : QAbstractListModel(parent)
-    , m_list(nullptr)
+    , m_items(nullptr)
 {
+
 }
 
 QVariant ToDoModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    // FIXME: Implement me!
+    switch(section)
+    {
+    case 0:
+        return QString("Student Name"); break;
+
+    case 1:
+        return QString("Number"); break;
+    default:
+        return QVariant(); break;
+    }
 }
 
 bool ToDoModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
@@ -28,7 +38,7 @@ int ToDoModel::rowCount(const QModelIndex &parent) const
     if (parent.isValid())
         return 0;
 
-    return m_list->getItems().size();
+    return m_items->getItems().size();
 }
 
 QVariant ToDoModel::data(const QModelIndex &index, int role) const
@@ -37,10 +47,12 @@ QVariant ToDoModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
 
-    const ToDoItem item = m_list->getItems().at(index.row());
+    const ToDoItem item = m_items->getItems().at(index.row());
     switch (role) {
+    case IsSelectedRole:
+        return QVariant(item.isSelected);
     case DoneRole:
-        return QVariant(item.done);
+        return QVariant::fromValue(item.done);
     case DetailsRole:
         return QVariant(item.details);
     case LabelRole:
@@ -52,8 +64,27 @@ QVariant ToDoModel::data(const QModelIndex &index, int role) const
 
 bool ToDoModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (data(index, role) != value) {
-        // FIXME: Implement me!
+    if (!m_items)
+        return false;
+
+    ToDoItem item = m_items->getItems().at(index.row());
+    switch (role) {
+    case DoneRole:
+        item.done = qvariant_cast<ToDoItemEnums::ToDoState>(value);
+        break;
+    case IsSelectedRole:
+        item.isSelected = value.toBool();
+        qDebug() << "now value item.isSelected " << value.toBool();
+        break;
+    case DetailsRole:
+        item.details = value.toString();
+        break;
+    case LabelRole:
+        item.label = value.toString();
+        break;
+    }
+
+    if (m_items->updateItemAt(index.row(), item)) {
         emit dataChanged(index, index, QVector<int>() << role);
         return true;
     }
@@ -74,37 +105,38 @@ QHash<int, QByteArray> ToDoModel::roleNames() const
     names[DoneRole] = "done";
     names[DetailsRole] = "details";
     names[LabelRole] = "label";
+    names[IsSelectedRole] = "isSelected";
     return names;
 }
 
 ToDoList *ToDoModel::list() const
 {
-    return m_list;
+    return m_items;
 }
 
 void ToDoModel::setList(ToDoList *list)
 {
     beginResetModel();
 
-    if (m_list) {
-        m_list->disconnect(this);
+    if (m_items) {
+        m_items->disconnect(this);
     }
 
-    m_list = list;
+    m_items = list;
 
-    if (m_list) {
-        connect(m_list, &ToDoList::todoItemAdditionStart, this, [=]() {
-            const int index = m_list->getItems().size();
+    if (m_items) {
+        connect(m_items, &ToDoList::todoItemAdditionStart, this, [=]() {
+            const int index = m_items->getItems().size();
             beginInsertRows(QModelIndex(), index, index);
         });
-        connect(m_list, &ToDoList::todoItemAdditionEnd, this, [=]() {
+        connect(m_items, &ToDoList::todoItemAdditionEnd, this, [=]() {
             endInsertRows();
         });
 
-        connect(m_list, &ToDoList::todoItemRemovalStart, this, [=](int index) {
+        connect(m_items, &ToDoList::todoItemRemovalStart, this, [=](int index) {
             beginRemoveRows(QModelIndex(), index, index);
         });
-        connect(m_list, &ToDoList::todoItemRemovalEnd, this, [=]() {
+        connect(m_items, &ToDoList::todoItemRemovalEnd, this, [=]() {
             endRemoveRows();
         });
     }

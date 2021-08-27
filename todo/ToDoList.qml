@@ -6,9 +6,10 @@ import QtQuick.Controls.Material.impl 2.12
 import Qt5Compat.GraphicalEffects
 
 import ToDoModel 1.0
+import todo.ToDoItem 1.0
 
 ListView {
-    property int _margin: 5
+    readonly property int _margin: 5
     implicitWidth:  250
     implicitHeight: 250
     clip: true
@@ -17,6 +18,10 @@ ListView {
     rightMargin: _margin
     topMargin: _margin
     bottomMargin: _margin
+
+    header: Text {
+        text: ToDoItemEnums.DONE
+    }
 
     model: ToDoModel {
         list: toDoList
@@ -37,6 +42,20 @@ ListView {
             id: todoItem
             implicitWidth: 200
             implicitHeight: calculateHeight()
+
+            background: Rectangle {
+                id: paneBackground
+                border.width: 1
+                radius: 5
+                border.color: model.isSelected ? "red" : "white"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onDoubleClicked: {
+                    model.isSelected = !model.isSelected
+                }
+            }
 
             Label {
                 id: todoLabel
@@ -67,6 +86,7 @@ ListView {
         }
 
         DropShadow {
+            id: todoItemShadow
             anchors.fill: todoItem
             horizontalOffset: 0
             verticalOffset: 0

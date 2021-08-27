@@ -49,12 +49,14 @@ ApplicationWindow {
                 display: AbstractButton.IconOnly
                 icon.source: "qrc:///icons/images/baseline_add_black_20.png"
                 icon.color: "white"
+                onClicked: toDoList.addItem()
             }
             RoundButton {
                 id: deleteButton
                 display: AbstractButton.IconOnly
                 icon.source: "qrc:///icons/images/baseline_delete_black_20.png"
                 icon.color: "white"
+                onClicked: toDoList.removeSelectedItems()
             }
         }
     }
@@ -64,15 +66,8 @@ ApplicationWindow {
         ColumnLayout {
             anchors.fill:parent
             ToDoList {
-//                anchors.fill:parent
-                //        anchors.centerIn: parent
-//                anchors.fill:parent
                 Layout.fillHeight: true
-
             }
         }
     }
-
-
-
 }

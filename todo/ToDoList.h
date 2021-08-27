@@ -26,6 +26,7 @@ signals:
 public slots:
     void addItem();
     void removeCompletedItem();
+    void removeSelectedItems();
 };
 
 #endif // TODOLIST_H

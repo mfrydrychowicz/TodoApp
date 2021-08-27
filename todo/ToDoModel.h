@@ -14,7 +14,8 @@ public:
     explicit ToDoModel(QObject *parent = nullptr);
 
     enum {
-        DoneRole = Qt::UserRole + 1,
+        IsSelectedRole = Qt::UserRole + 1,
+        DoneRole,
         LabelRole,
         DetailsRole
     };
@@ -41,7 +42,7 @@ public:
     void setList(ToDoList* list);
 
 private:
-    ToDoList *m_list;
+    ToDoList *m_items;
 };
 
 #endif // TODOMODEL_H

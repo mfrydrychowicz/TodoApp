@@ -2,9 +2,11 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QMetaType>
 
 #include "todo/ToDoModel.h"
 #include "todo/ToDoList.h"
+#include "todo/ToDoItem.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,10 +17,16 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QFontDatabase::addApplicationFont(":/fonts/fonts/Roboto-Light.ttf");
-    QFont font = QFont("Roboto Light", 12);
+    QFont font = QFont(
+                "Roboto Light", 12);
     app.setFont(font);
 
     qmlRegisterType<ToDoModel>("ToDoModel", 1, 0, "ToDoModel");
+    qmlRegisterUncreatableMetaObject(ToDoItemEnums::staticMetaObject,
+                                     "todo.ToDoItem",
+                                     1, 0,
+                                     "ToDoItemEnums",
+                                     "Error: cannot create enum in QML");
     qmlRegisterUncreatableType<ToDoList>("ToDoList",
                                          1,
                                          0,
