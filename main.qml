@@ -1,8 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
-import QtQuick.Controls.Material 2.3
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.12
+import QtQuick.Controls.Universal 2.12
+import "ToDo"
 
 ApplicationWindow {
     width: 640
@@ -11,9 +12,13 @@ ApplicationWindow {
     title: qsTr("Todo application")
 
     header: ToolBar {
-
         id: headerToolbar
         Layout.fillWidth: true
+        height: 50
+        background: Rectangle {
+            color: Universal.color(Universal.Emerald)
+            opacity: 0.7
+        }
 
         RowLayout {
             spacing: 10
@@ -25,12 +30,10 @@ ApplicationWindow {
             Text {
                 id: applicationName
                 text: "Todo application"
-                visible: true
                 color: "white"
-                anchors.left: headerToolbar.left
+                font.bold: true
             }
         }
-
         RowLayout {
             spacing: 10
             anchors {
@@ -39,29 +42,32 @@ ApplicationWindow {
                 right: parent.right
                 verticalCenter: parent.verticalCenter
             }
-
             implicitWidth: addButton.implicitWidth + deleteButton.implicitWidth + 10
-
 
             RoundButton {
                 id: addButton
                 display: AbstractButton.IconOnly
                 icon.source: "qrc:///icons/images/baseline_add_black_20.png"
+                icon.color: "white"
+                onClicked: toDoList.addItem()
             }
-
             RoundButton {
                 id: deleteButton
                 display: AbstractButton.IconOnly
                 icon.source: "qrc:///icons/images/baseline_delete_black_20.png"
+                icon.color: "white"
+                onClicked: toDoList.removeSelectedItems()
             }
         }
-
-
     }
-
     Pane {
-
-
+        padding: 10
+        anchors.fill:parent
+        ColumnLayout {
+            anchors.fill:parent
+            ToDoList {
+                Layout.fillHeight: true
+            }
+        }
     }
-
 }
