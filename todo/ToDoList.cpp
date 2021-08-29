@@ -5,7 +5,8 @@
 ToDoList::ToDoList(QObject *parent) : QObject(parent)
 {
     m_items.append({ToDoItemEnums::ToDoState::PENDING, QStringLiteral("Email"), QStringLiteral("Email X company to regarding Y")});
-    m_items.append({ToDoItemEnums::ToDoState::PENDING, QStringLiteral("Wash Dishes"), QLatin1String("")});
+    m_items.append(
+        {ToDoItemEnums::ToDoState::PENDING, QStringLiteral("Wash Dishes"), QLatin1String("")});
     m_items.append({ToDoItemEnums::ToDoState::PENDING, QStringLiteral("Read 1h"), QLatin1String("")});
 }
 

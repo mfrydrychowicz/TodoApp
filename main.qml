@@ -3,10 +3,11 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Universal 2.12
+import Qt5Compat.GraphicalEffects
 import "ToDo"
 
 ApplicationWindow {
-    width: 640
+    minimumWidth: 650
     height: 480
     visible: true
     title: qsTr("Todo application")
@@ -61,75 +62,175 @@ ApplicationWindow {
         }
     }
 
-    RowLayout {
-        anchors.fill: parent
-        spacing: 2
-        ColumnLayout {
-            Layout.preferredWidth: parent.width / 3
-            Layout.preferredHeight: parent.height
-            Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: true
+    Item {
+        anchors.fill:parent
+        anchors.margins: 15
+        RowLayout {
+            anchors.fill: parent
+            spacing: 4
 
-            Label {
-                padding: 5
-                color: "gray"
-                text: "Pending"
+            Item {
+                Component.onCompleted: {
+                    console.log(this.width)
+                }
 
-                Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-            }
-            ToDoList {
-                Layout.fillWidth: true
+                Layout.preferredWidth: parent.width / 3
                 Layout.fillHeight: true
-            }
-        }
-        ColumnLayout {
-            Layout.preferredWidth: parent.width / 3
-            Layout.preferredHeight: parent.height
-            Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter
+                Rectangle {
+                    id: pendingColumnBorder
+                    anchors.fill:parent
+                    //                    Layout.preferredWidth: parent.width / 3
+                    //                    Layout.fillHeight: true
+                    //                    Layout.alignment: Qt.AlignCenter
+                    radius: 8
+                    ColumnLayout {
+                        Layout.alignment: Qt.AlignCenter
+                        anchors.fill: parent
 
-            Label {
-                padding: 5
-                color: "blue"
-                text: "In progress"
+                        Label {
+                            topPadding: 8
+                            bottomPadding: 4
+                            color: "lightsteelblue"
+                            font.pixelSize: 16
+                            text: "Pending"
+                            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+                        }
 
-                Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+
+                        Rectangle {
+                            Layout.fillWidth: true
+                            height: 4
+                            color: "lightsteelblue"
+                        }
+
+                        ToDoList {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
+                    }
+
+
+                }
+                DropShadow {
+                    anchors.fill: pendingColumnBorder
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 6
+                    color: "lightgray"
+                    source: pendingColumnBorder
+                    transparentBorder: true
+                }
             }
-            ToDoList {
-                Layout.fillWidth: true
+            Item {
+                Layout.preferredWidth: parent.width / 3
                 Layout.fillHeight: true
-            }
-        }
-        ColumnLayout {
-            Layout.preferredWidth: parent.width / 3
-            Layout.preferredHeight: parent.height
-            Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: true
+                Layout.alignment: Qt.AlignCenter
+                Rectangle {
+                    id: inProgressColumnBorder
+                    //                    Layout.preferredWidth: parent.width / 3
+                    //                    Layout.fillHeight: true
+                    //                    Layout.alignment: Qt.AlignCenter
+                    anchors.fill:parent
+                    radius: 8
+                    ColumnLayout {
+                        Layout.alignment: Qt.AlignCenter
+                        anchors.fill: parent
 
-            Label {
-                padding: 5
-                color: "green"
-                text: "Done"
 
-                Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+                        Label {
+                            topPadding: 8
+                            bottomPadding: 4
+                            color: "dodgerblue"
+                            font.pixelSize: 16
+                            text: "In progress"
+                            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+                        }
+
+
+                        Rectangle {
+                            Layout.fillWidth: true
+                            height: 4
+                            color: "dodgerblue"
+                        }
+
+                        ToDoList {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
+                    }
+                }
+                DropShadow {
+                    anchors.fill: inProgressColumnBorder
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 6
+                    color: "lightgray"
+                    source: inProgressColumnBorder
+                    transparentBorder: true
+                }
             }
-            ToDoList {
-                Layout.fillWidth: true
+            Item {
+                Layout.preferredWidth: parent.width / 3
                 Layout.fillHeight: true
+                Layout.alignment: Qt.AlignCenter
+                Rectangle {
+                    anchors.fill:parent
+                    id: doneColumnBorder
+//                    Layout.preferredWidth: parent.width / 3
+//                    Layout.fillHeight: true
+
+//                    Layout.alignment: Qt.AlignCenter
+                    radius: 8
+                    ColumnLayout {
+                        Layout.alignment: Qt.AlignCenter
+                        anchors.fill: parent
+
+
+                        Label {
+                            topPadding: 8
+                            bottomPadding: 4
+                            color: "lightseagreen"
+                            font.pixelSize: 16
+                            text: "Done"
+                            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+                        }
+
+
+                        Rectangle {
+                            Layout.fillWidth: true
+                            height: 4
+                            color: "lightseagreen"
+                        }
+
+                        ToDoList {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                        }
+                    }
+                }
+                DropShadow {
+                    anchors.fill: doneColumnBorder
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 6
+                    color: "lightgray"
+                    source: doneColumnBorder
+                    transparentBorder: true
+                }
             }
         }
     }
-
-//    Pane {
-//        padding: 10
-//        anchors.fill:parent
-//        ColumnLayout {
-//            anchors.fill:parent
-//            ToDoList {
-//                Layout.fillHeight: true
-//            }
-//        }
-//    }
+    //    Pane {
+    //        padding: 10
+    //        anchors.fill:parent
+    //        ColumnLayout {
+    //            anchors.fill:parent
+    //            ToDoList {
+    //                Layout.fillHeight: true
+    //            }
+    //        }
+    //    }
 }
 
 /*##^##

@@ -11,6 +11,7 @@ import todo.ToDoItem 1.0
 ListView {
 
     readonly property int _margin: 5
+    id: listView
     implicitWidth:  parent.implicitWidth
     implicitHeight: parent.implicitWidth
     clip: true
@@ -19,10 +20,6 @@ ListView {
     rightMargin: _margin
     topMargin: _margin
     bottomMargin: _margin
-
-    header: Text {
-        text: ToDoItemEnums.DONE
-    }
 
     ScrollBar.vertical: ScrollBar {
         width: 4
@@ -34,11 +31,13 @@ ListView {
 
 
     delegate: Item {
-        implicitWidth: Math.max(todoLabel.implicitWidth + 20, todoDetails.implicitWidth + 20)
+        implicitWidth: parent ? parent.width :  Math.max(todoLabel.implicitWidth + 20, todoDetails.implicitWidth + 20)
+
         implicitHeight: calculateHeight()
         function calculateHeight() {
             var height = todoLabel.implicitHeight + 20
-            if (model.details.length > 0) {
+//            console.log(model.label, model.done) // why sometimes undefined undefined?
+            if (model.details && model.details.length > 0) {
                 height = height + todoDetails.implicitHeight + separator.implicitHeight + 20
             }
             return height
@@ -46,7 +45,8 @@ ListView {
 
         Pane {
             id: todoItem
-            implicitWidth: 200
+            width: parent.width
+//            implicitWidth: parent.width
             implicitHeight: calculateHeight()
 
             background: Rectangle {
@@ -65,6 +65,8 @@ ListView {
 
             Label {
                 id: todoLabel
+                anchors.left: parent.left
+                anchors.right: parent.right
                 text: model.label
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
