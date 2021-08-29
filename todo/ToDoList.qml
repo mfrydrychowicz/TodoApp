@@ -65,6 +65,8 @@ ListView {
 
             Label {
                 id: todoLabel
+                anchors.left: parent.left
+                anchors.right: parent.right
                 text: model.label
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
