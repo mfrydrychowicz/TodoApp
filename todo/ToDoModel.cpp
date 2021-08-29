@@ -4,7 +4,6 @@ ToDoModel::ToDoModel(QObject *parent)
     : QAbstractListModel(parent)
     , m_items(nullptr)
 {
-
 }
 
 QVariant ToDoModel::headerData(int section, Qt::Orientation orientation, int role) const

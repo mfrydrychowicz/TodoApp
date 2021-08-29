@@ -9,9 +9,10 @@ import ToDoModel 1.0
 import todo.ToDoItem 1.0
 
 ListView {
+
     readonly property int _margin: 5
-    implicitWidth:  250
-    implicitHeight: 250
+    implicitWidth:  parent.implicitWidth
+    implicitHeight: parent.implicitWidth
     clip: true
     spacing: 5
     leftMargin: _margin
@@ -23,9 +24,14 @@ ListView {
         text: ToDoItemEnums.DONE
     }
 
+    ScrollBar.vertical: ScrollBar {
+        width: 4
+    }
+
     model: ToDoModel {
         list: toDoList
     }
+
 
     delegate: Item {
         implicitWidth: Math.max(todoLabel.implicitWidth + 20, todoDetails.implicitWidth + 20)

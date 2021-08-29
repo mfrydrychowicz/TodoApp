@@ -60,14 +60,80 @@ ApplicationWindow {
             }
         }
     }
-    Pane {
-        padding: 10
-        anchors.fill:parent
+
+    RowLayout {
+        anchors.fill: parent
+        spacing: 2
         ColumnLayout {
-            anchors.fill:parent
+            Layout.preferredWidth: parent.width / 3
+            Layout.preferredHeight: parent.height
+            Layout.alignment: Qt.AlignCenter
+            Layout.fillWidth: true
+
+            Label {
+                padding: 5
+                color: "gray"
+                text: "Pending"
+
+                Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+            }
             ToDoList {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+        }
+        ColumnLayout {
+            Layout.preferredWidth: parent.width / 3
+            Layout.preferredHeight: parent.height
+            Layout.alignment: Qt.AlignCenter
+            Layout.fillWidth: true
+
+            Label {
+                padding: 5
+                color: "blue"
+                text: "In progress"
+
+                Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+            }
+            ToDoList {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+        }
+        ColumnLayout {
+            Layout.preferredWidth: parent.width / 3
+            Layout.preferredHeight: parent.height
+            Layout.alignment: Qt.AlignCenter
+            Layout.fillWidth: true
+
+            Label {
+                padding: 5
+                color: "green"
+                text: "Done"
+
+                Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+            }
+            ToDoList {
+                Layout.fillWidth: true
                 Layout.fillHeight: true
             }
         }
     }
+
+//    Pane {
+//        padding: 10
+//        anchors.fill:parent
+//        ColumnLayout {
+//            anchors.fill:parent
+//            ToDoList {
+//                Layout.fillHeight: true
+//            }
+//        }
+//    }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/
