@@ -3,14 +3,59 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Universal 2.12
+//import QtQuick.Controls.Material 2.12
 import Qt5Compat.GraphicalEffects
 import "ToDo"
 
 ApplicationWindow {
-    minimumWidth: 650
+    id: mainWindow
+    width: 650
     height: 480
     visible: true
     title: qsTr("Todo application")
+
+    Popup {
+        id: addItemPopup
+        modal: true
+        focus: true
+        anchors.centerIn: Overlay.overlay
+        background: Rectangle {
+            readonly property int popupMargin: 10
+            radius: 5
+            implicitWidth: contents.implicitWidth + popupMargin * 2
+            implicitHeight: contents.implicitHeight + popupMargin * 2
+
+            ColumnLayout {
+                id: contents
+                anchors.centerIn : parent
+
+                TextField {
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: true
+                    placeholderText: qsTr("Enter name")
+                }
+
+                RowLayout {
+                    Button {
+                        text: "Add"
+                        onClicked: {
+                            console.log("Add button clicked")
+                        }
+                    }
+                    Button {
+                        text: "Cancel"
+                        onClicked: {
+                            console.log("Cancel button clicked")
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    }
 
     header: ToolBar {
         id: headerToolbar
@@ -50,8 +95,10 @@ ApplicationWindow {
                 display: AbstractButton.IconOnly
                 icon.source: "qrc:///icons/images/baseline_add_black_20.png"
                 icon.color: "white"
-                onClicked: toDoList.addItem()
+                onClicked: addItemPopup.open()//toDoList.addItem()
             }
+
+
             RoundButton {
                 id: deleteButton
                 display: AbstractButton.IconOnly
@@ -177,10 +224,10 @@ ApplicationWindow {
                 Rectangle {
                     anchors.fill:parent
                     id: doneColumnBorder
-//                    Layout.preferredWidth: parent.width / 3
-//                    Layout.fillHeight: true
+                    //                    Layout.preferredWidth: parent.width / 3
+                    //                    Layout.fillHeight: true
 
-//                    Layout.alignment: Qt.AlignCenter
+                    //                    Layout.alignment: Qt.AlignCenter
                     radius: 8
                     ColumnLayout {
                         Layout.alignment: Qt.AlignCenter
