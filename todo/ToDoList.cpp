@@ -32,14 +32,14 @@ bool ToDoList::updateItemAt(int index, const ToDoItem &item)
     return result;
 }
 
-void ToDoList::addItem()
+void ToDoList::addItem(QString a_label, QString a_details)
 {
     emit todoItemAdditionStart();
 
     ToDoItem item;
     item.done = ToDoItemEnums::ToDoState::PENDING;
-    item.label = QStringLiteral("Label example");
-    item.details = QStringLiteral("Details example");
+    item.label = a_label;
+    item.details = a_details;
     m_items.append(item);
 
     emit todoItemAdditionEnd();

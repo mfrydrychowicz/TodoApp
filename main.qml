@@ -9,8 +9,8 @@ import "ToDo"
 
 ApplicationWindow {
     id: mainWindow
-    width: 650
-    height: 480
+    minimumWidth: 650
+    minimumHeight: 480
     visible: true
     title: qsTr("Todo application")
 
@@ -19,42 +19,119 @@ ApplicationWindow {
         modal: true
         focus: true
         anchors.centerIn: Overlay.overlay
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        function clearUserInput() {
+            tfTodoTitle.text = ""
+            tfTodoDetails.text = ""
+        }
+
+        function restorePopup() {
+            tfTodoTitle.focus = true
+            clearUserInput()
+        }
+        onClosed: restorePopup()
+
+
+
         background: Rectangle {
             readonly property int popupMargin: 10
             radius: 5
-            implicitWidth: contents.implicitWidth + popupMargin * 2
-            implicitHeight: contents.implicitHeight + popupMargin * 2
+            width: 400//contents.implicitWidth + popupMargin * 2
+            height: contents.implicitHeight + popupMargin * 2
+            anchors.centerIn : parent
+
 
             ColumnLayout {
                 id: contents
-                anchors.centerIn : parent
+                anchors.margins: parent.popupMargin
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
 
                 TextField {
+                    id: tfTodoTitle
                     Layout.alignment: Qt.AlignHCenter
                     Layout.fillWidth: true
-                    placeholderText: qsTr("Enter name")
+                    placeholderText: qsTr("Enter title")
+                    focus: true
+                    background: Rectangle {
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 3
+                        color: parent.focus ? "limegreen" : "lightgreen"
+                        radius: 8
+                        clip: true
+                        antialiasing: true
+                    }
+                }
+
+                TextField {
+                    id: tfTodoDetails
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: true
+                    placeholderText: qsTr("Enter details")
+                    background: Rectangle {
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 3
+                        color: parent.focus ? "limegreen" : "lightgreen"
+                        radius: 8
+                        clip: true
+                        antialiasing: true
+                    }
                 }
 
                 RowLayout {
+                    Layout.alignment: Qt.AlignRight
                     Button {
                         text: "Add"
                         onClicked: {
                             console.log("Add button clicked")
+                            toDoList.addItem(tfTodoTitle.text, tfTodoDetails.text)
+                            addItemPopup.close()
                         }
+                        contentItem: Text {
+                            text: parent.text
+                            font: parent.font
+                            color: "white"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+                        background: Rectangle {
+                            color: parent.down ? "lightgreen" : "limegreen"
+                            border.color: "transparent"
+                            border.width: 1
+                            radius: 5
+                        }
+
                     }
                     Button {
                         text: "Cancel"
                         onClicked: {
-                            console.log("Cancel button clicked")
+                            addItemPopup.close()
+                        }
+                        contentItem: Text {
+                            text: parent.text
+                            font: parent.font
+                            color: parent.down ? "lightgreen" : "limegreen"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+                        background: Rectangle {
+                            opacity: enabled ? 1 : 0.3
+                            border.color: parent.down ? "lightgreen" : "limegreen"
+                            border.width: 1
+                            radius: 5
                         }
                     }
                 }
             }
-
         }
-
-
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
     }
 
     header: ToolBar {
