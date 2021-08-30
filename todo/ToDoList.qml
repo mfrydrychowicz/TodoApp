@@ -31,23 +31,21 @@ ListView {
 
 
     delegate: Item {
-        implicitWidth: parent ? parent.width :  Math.max(todoLabel.implicitWidth + 20, todoDetails.implicitWidth + 20)
-
-        implicitHeight: calculateHeight()
-        function calculateHeight() {
-            var height = todoLabel.implicitHeight + 20
-//            console.log(model.label, model.done) // why sometimes undefined undefined?
-            if (model.details && model.details.length > 0) {
-                height = height + todoDetails.implicitHeight + separator.implicitHeight + 20
-            }
-            return height
-        }
+        implicitWidth: parent ? parent.width : Math.max(labelRow.implicitWidth, todoDetails.implicitWidth)
+        implicitHeight: todoItem.implicitHeight
 
         Pane {
             id: todoItem
             width: parent.width
-//            implicitWidth: parent.width
-            implicitHeight: calculateHeight()
+            contentHeight: calculateHeight()
+            function calculateHeight() {
+                var height = labelRow.implicitHeight //+ 20
+                //                console.log(model.label, model.done) // why sometimes undefined undefined?
+                if (model.details && model.details.length > 0) {
+                    height = height + todoDetails.implicitHeight + separator.implicitHeight //+ 30
+                }
+                return height
+            }
 
             background: Rectangle {
                 id: paneBackground
@@ -55,32 +53,84 @@ ListView {
                 radius: 5
                 border.color: model.isSelected ? "red" : "white"
             }
-
-            MouseArea {
-                anchors.fill: parent
-                onDoubleClicked: {
-                    model.isSelected = !model.isSelected
-                }
-            }
-
-            Label {
-                id: todoLabel
+            RowLayout {
+                id: labelRow
                 anchors.left: parent.left
                 anchors.right: parent.right
-                text: model.label
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                height: todoLabel.height
+
+                TextInput {
+                    id: todoLabel
+                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    text: model.label
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    focus: true
+                }
+
+                Item
+                {
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    implicitWidth: childrenRect.width
+                    implicitHeight: childrenRect.height
+                    Button {
+                        id: editButton
+
+//                        anchors.right: parent.right
+                        icon.source: "qrc:///icons/images/baseline_edit_black_20.png"
+                        icon.color: "lightgray"
+                        icon.width: 18
+                        icon.height: 18
+                        padding: 0
+    //                    width: icon.width
+    //                    height: icon.height
+                        visible: true /*hovered*/
+                        background: Rectangle {
+                            color: "transparent"
+                            anchors.fill: parent
+                        }
+
+                    }
+
+                    MouseArea {
+                        id: editButtonMouseArea
+                        anchors.fill: editButton
+                        propagateComposedEvents: true
+                        onClicked: {
+                            todoLabel.readOnly = !todoLabel.readOnly
+                            todoLabel.focus = true
+                            todoLabel.activeFocusOnPress = true
+                            console.log(todoLabel.readOnly)
+                        }
+                    }
+                }
+
             }
 
+            MouseArea {
+                id: maEditButton
+                anchors.fill: labelRow
+                hoverEnabled: true         //this line will enable mouseArea.containsMouse
+                propagateComposedEvents: true
+                onEntered: {
+                    editButton.visible = true
+                }
+
+                onExited: {
+                    editButton.visible = false
+                }
+//                onClicked: {
+//                    console.log("AAAAAAAAAAAAA")
+//                }
+            }
             ToolSeparator {
                 id: separator
                 orientation: Qt.Horizontal
-                anchors.top: todoLabel.bottom
+                anchors.top: labelRow.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
                 visible: model.details.length > 0
             }
-
-            Text {
+            TextEdit {
                 leftPadding: 10
                 rightPadding: 10
                 id: todoDetails
@@ -90,7 +140,20 @@ ListView {
                 width: parent.width - 20
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 visible: model.details.length > 0
+
             }
+
+            MouseArea {
+                anchors.fill: parent
+                propagateComposedEvents: true
+                onDoubleClicked: {
+                    model.isSelected = !model.isSelected
+                }
+            }
+
+
+
+
         }
 
         DropShadow {
