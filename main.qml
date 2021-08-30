@@ -172,7 +172,7 @@ ApplicationWindow {
                 display: AbstractButton.IconOnly
                 icon.source: "qrc:///icons/images/baseline_add_black_20.png"
                 icon.color: "white"
-                onClicked: addItemPopup.open()//toDoList.addItem()
+                onClicked: addItemPopup.open()
             }
 
 
