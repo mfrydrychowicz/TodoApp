@@ -3,14 +3,136 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Universal 2.12
+//import QtQuick.Controls.Material 2.12
 import Qt5Compat.GraphicalEffects
 import "ToDo"
 
 ApplicationWindow {
+    id: mainWindow
     minimumWidth: 650
-    height: 480
+    minimumHeight: 480
     visible: true
     title: qsTr("Todo application")
+
+    Popup {
+        id: addItemPopup
+        modal: true
+        focus: true
+        anchors.centerIn: Overlay.overlay
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        function clearUserInput() {
+            tfTodoTitle.text = ""
+            tfTodoDetails.text = ""
+        }
+
+        function restorePopup() {
+            tfTodoTitle.focus = true
+            clearUserInput()
+        }
+        onClosed: restorePopup()
+
+
+
+        background: Rectangle {
+            readonly property int popupMargin: 10
+            radius: 5
+            width: 400//contents.implicitWidth + popupMargin * 2
+            height: contents.implicitHeight + popupMargin * 2
+            anchors.centerIn : parent
+
+
+            ColumnLayout {
+                id: contents
+                anchors.margins: parent.popupMargin
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+
+                TextField {
+                    id: tfTodoTitle
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: true
+                    placeholderText: qsTr("Enter title")
+                    focus: true
+                    background: Rectangle {
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 3
+                        color: parent.focus ? "limegreen" : "lightgreen"
+                        radius: 8
+                        clip: true
+                        antialiasing: true
+                    }
+                }
+
+                TextField {
+                    id: tfTodoDetails
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.fillWidth: true
+                    placeholderText: qsTr("Enter details")
+                    background: Rectangle {
+                        anchors.left: parent.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 3
+                        color: parent.focus ? "limegreen" : "lightgreen"
+                        radius: 8
+                        clip: true
+                        antialiasing: true
+                    }
+                }
+
+                RowLayout {
+                    Layout.alignment: Qt.AlignRight
+                    Button {
+                        text: "Add"
+                        onClicked: {
+                            console.log("Add button clicked")
+                            toDoList.addItem(tfTodoTitle.text, tfTodoDetails.text)
+                            addItemPopup.close()
+                        }
+                        contentItem: Text {
+                            text: parent.text
+                            font: parent.font
+                            color: "white"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+                        background: Rectangle {
+                            color: parent.down ? "lightgreen" : "limegreen"
+                            border.color: "transparent"
+                            border.width: 1
+                            radius: 5
+                        }
+
+                    }
+                    Button {
+                        text: "Cancel"
+                        onClicked: {
+                            addItemPopup.close()
+                        }
+                        contentItem: Text {
+                            text: parent.text
+                            font: parent.font
+                            color: parent.down ? "lightgreen" : "limegreen"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+                        background: Rectangle {
+                            opacity: enabled ? 1 : 0.3
+                            border.color: parent.down ? "lightgreen" : "limegreen"
+                            border.width: 1
+                            radius: 5
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     header: ToolBar {
         id: headerToolbar
@@ -50,8 +172,10 @@ ApplicationWindow {
                 display: AbstractButton.IconOnly
                 icon.source: "qrc:///icons/images/baseline_add_black_20.png"
                 icon.color: "white"
-                onClicked: toDoList.addItem()
+                onClicked: addItemPopup.open()
             }
+
+
             RoundButton {
                 id: deleteButton
                 display: AbstractButton.IconOnly
@@ -177,10 +301,10 @@ ApplicationWindow {
                 Rectangle {
                     anchors.fill:parent
                     id: doneColumnBorder
-//                    Layout.preferredWidth: parent.width / 3
-//                    Layout.fillHeight: true
+                    //                    Layout.preferredWidth: parent.width / 3
+                    //                    Layout.fillHeight: true
 
-//                    Layout.alignment: Qt.AlignCenter
+                    //                    Layout.alignment: Qt.AlignCenter
                     radius: 8
                     ColumnLayout {
                         Layout.alignment: Qt.AlignCenter

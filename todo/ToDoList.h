@@ -24,7 +24,7 @@ signals:
     void todoItemRemovalEnd();
 
 public slots:
-    void addItem();
+    void addItem(QString a_label, QString a_details);
     void removeCompletedItem();
     void removeSelectedItems();
 };
