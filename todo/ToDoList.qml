@@ -53,21 +53,41 @@ ListView {
                 id: paneBackground
                 border.width: 1
                 radius: 5
-                border.color: model.isSelected ? "red" : "white"
+                border.color: model.isSelected ? "limegreen" : "white"
             }
+
             RowLayout {
                 id: labelRow
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: todoLabel.height
 
-                TextInput {
-                    id: todoLabel
-                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                    text: model.label
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    focus: true
+                Item {
+                    id: name
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    TextEdit {
+                        id: todoLabel
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                        text: model.label
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        selectedTextColor: "white"
+                        selectionColor: "limegreen"
+                        selectByMouse: true
+                    }
+//                    MouseArea {
+//                        anchors.fill: todoLabel
+//                        propagateComposedEvents: true
+
+//                        onClicked: {
+//                            console.log ("AAA")
+//                            todoLabel.enabled = true
+//                            itemMouseArea.enabled = false
+//                            this.enabled = false
+//                        }
+//                    }
                 }
+
 
                 Item
                 {
@@ -75,17 +95,18 @@ ListView {
                     implicitWidth: childrenRect.width
                     implicitHeight: childrenRect.height
                     Button {
+                        property bool isSelected: false
+                        property bool isVisible: false
                         id: editButton
 
-//                        anchors.right: parent.right
                         icon.source: "qrc:///icons/images/baseline_edit_black_20.png"
-                        icon.color: "lightgray"
+                        icon.color: isSelected ? "limegreen" : "lightgray"
                         icon.width: 18
                         icon.height: 18
                         padding: 0
-    //                    width: icon.width
-    //                    height: icon.height
-                        visible: true /*hovered*/
+                        width: icon.width
+                        height: icon.height
+                        visible: isVisible
                         background: Rectangle {
                             color: "transparent"
                             anchors.fill: parent
@@ -98,10 +119,20 @@ ListView {
                         anchors.fill: editButton
                         propagateComposedEvents: true
                         onClicked: {
-                            todoLabel.readOnly = !todoLabel.readOnly
-                            todoLabel.focus = true
-                            todoLabel.activeFocusOnPress = true
-                            console.log(todoLabel.readOnly)
+                            editButton.isSelected = !editButton.isSelected
+                            editButton.isVisible = editButton.isSelected
+
+                            if (editButton.isSelected) {
+                                maToDoItemLabel.enabled = false
+                                itemMouseArea.enabled = false
+                                todoLabel.readOnly = false
+                                todoDetails.readOnly = false
+                            } else {
+                                maToDoItemLabel.enabled = true
+                                itemMouseArea.enabled = true
+                                todoLabel.readOnly = true
+                                todoDetails.readOnly = true
+                            }
                         }
                     }
                 }
@@ -109,20 +140,24 @@ ListView {
             }
 
             MouseArea {
-                id: maEditButton
+                property alias isEnabled: maToDoItemLabel.enabled
+                id: maToDoItemLabel
+                enabled: true
                 anchors.fill: labelRow
                 hoverEnabled: true         //this line will enable mouseArea.containsMouse
-                propagateComposedEvents: true
+//                propagateComposedEvents: true
                 onEntered: {
-                    editButton.visible = true
+                    editButton.isVisible = true
                 }
 
                 onExited: {
-                    editButton.visible = false
+                    editButton.isVisible = editButton.isVisible && editButton.isSelected
                 }
-//                onClicked: {
-//                    console.log("AAAAAAAAAAAAA")
-//                }
+                onClicked: {
+                    console.log("Label clicked. Enabled: ", enabled)
+
+                    mouse.accepted = false
+                }
             }
             ToolSeparator {
                 id: separator
@@ -142,14 +177,21 @@ ListView {
                 width: parent.width - 20
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 visible: model.details.length > 0
-
+                selectByMouse: true
+                selectedTextColor: "white"
+                selectionColor: "limegreen"
             }
 
             MouseArea {
+                id: itemMouseArea
                 anchors.fill: parent
                 propagateComposedEvents: true
                 onDoubleClicked: {
                     model.isSelected = !model.isSelected
+                }
+                onClicked: {
+//                    console.log("TodoItem clicked, mouse event onClicked not accepted")
+                    mouse.accepted = false
                 }
             }
 
