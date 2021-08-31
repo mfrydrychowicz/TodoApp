@@ -20,6 +20,8 @@ ApplicationWindow {
         focus: true
         anchors.centerIn: Overlay.overlay
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        implicitWidth: contents.width
+        implicitHeight: contents.height
 
         function clearUserInput() {
             tfTodoTitle.text = ""
@@ -32,9 +34,7 @@ ApplicationWindow {
         }
         onClosed: restorePopup()
 
-
-
-        background: Rectangle {
+        Rectangle {
             readonly property int popupMargin: 10
             radius: 5
             width: 400//contents.implicitWidth + popupMargin * 2

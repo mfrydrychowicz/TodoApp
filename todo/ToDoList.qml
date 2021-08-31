@@ -13,8 +13,8 @@ ListView {
     readonly property int _margin: 5
     property alias list : listViewModel.list
     id: listView
-    implicitWidth:  parent.implicitWidth
-    implicitHeight: parent.implicitWidth
+    implicitWidth:  parent.width
+    implicitHeight: parent.height
     clip: true
     spacing: 5
     leftMargin: _margin
