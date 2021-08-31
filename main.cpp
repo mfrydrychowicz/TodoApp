@@ -1,8 +1,8 @@
 #include <QFontDatabase>
 #include <QGuiApplication>
+#include <QMetaType>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QMetaType>
 
 #include "todo/ToDoModel.h"
 #include "todo/ToDoList.h"
@@ -32,10 +32,15 @@ int main(int argc, char *argv[])
                                          0,
                                          "ToDoList",
                                          QStringLiteral("ToDoList shall not be created in QML"));
-    ToDoList toDoList;
+    ToDoList toDoListPending;
+    ToDoList toDoListInProgress;
+    ToDoList toDoListDone;
 
     QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty(QStringLiteral("toDoList"), &toDoList);
+    engine.rootContext()->setContextProperty(QStringLiteral("toDoListPending"), &toDoListPending);
+    engine.rootContext()->setContextProperty(QStringLiteral("toDoListInProgress"),
+                                             &toDoListInProgress);
+    engine.rootContext()->setContextProperty(QStringLiteral("toDoListDone"), &toDoListDone);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(

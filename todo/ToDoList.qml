@@ -11,6 +11,7 @@ import todo.ToDoItem 1.0
 ListView {
 
     readonly property int _margin: 5
+    property alias list : listViewModel.list
     id: listView
     implicitWidth:  parent.implicitWidth
     implicitHeight: parent.implicitWidth
@@ -26,7 +27,8 @@ ListView {
     }
 
     model: ToDoModel {
-        list: toDoList
+        id: listViewModel
+//        list: toDoList
     }
 
 

@@ -60,7 +60,7 @@ ApplicationWindow {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         width: 3
-                        color: parent.focus ? "limegreen" : "lightgreen"
+                        color: parent.focus ? "green" : "limegreen"
                         radius: 8
                         clip: true
                         antialiasing: true
@@ -77,7 +77,7 @@ ApplicationWindow {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         width: 3
-                        color: parent.focus ? "limegreen" : "lightgreen"
+                        color: parent.focus ? "green" : "limegreen"
                         radius: 8
                         clip: true
                         antialiasing: true
@@ -90,7 +90,7 @@ ApplicationWindow {
                         text: "Add"
                         onClicked: {
                             console.log("Add button clicked")
-                            toDoList.addItem(tfTodoTitle.text, tfTodoDetails.text)
+                            toDoListPending.addItem(tfTodoTitle.text, tfTodoDetails.text)
                             addItemPopup.close()
                         }
                         contentItem: Text {
@@ -102,7 +102,7 @@ ApplicationWindow {
                             elide: Text.ElideRight
                         }
                         background: Rectangle {
-                            color: parent.down ? "lightgreen" : "limegreen"
+                            color: parent.down ? "limegreen" : "green"
                             border.color: "transparent"
                             border.width: 1
                             radius: 5
@@ -117,14 +117,14 @@ ApplicationWindow {
                         contentItem: Text {
                             text: parent.text
                             font: parent.font
-                            color: parent.down ? "lightgreen" : "limegreen"
+                            color: parent.down ? "limegreen" : "green"
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                         }
                         background: Rectangle {
                             opacity: enabled ? 1 : 0.3
-                            border.color: parent.down ? "lightgreen" : "limegreen"
+                            border.color: parent.down ? "limegreen" : "green"
                             border.width: 1
                             radius: 5
                         }
@@ -181,7 +181,11 @@ ApplicationWindow {
                 display: AbstractButton.IconOnly
                 icon.source: "qrc:///icons/images/baseline_delete_black_20.png"
                 icon.color: "white"
-                onClicked: toDoList.removeSelectedItems()
+                onClicked:  {
+                    toDoListPending.removeSelectedItems()
+                    toDoListInProgress.removeSelectedItems()
+                    toDoListDone.removeSelectedItems()
+                }
             }
         }
     }
@@ -231,6 +235,7 @@ ApplicationWindow {
                         ToDoList {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            list: toDoListPending
                         }
                     }
 
@@ -281,6 +286,7 @@ ApplicationWindow {
                         ToDoList {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            list: toDoListInProgress
                         }
                     }
                 }
@@ -330,6 +336,7 @@ ApplicationWindow {
                         ToDoList {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            list: toDoListDone
                         }
                     }
                 }
