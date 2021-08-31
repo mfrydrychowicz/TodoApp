@@ -74,18 +74,11 @@ ListView {
                         selectedTextColor: "white"
                         selectionColor: "limegreen"
                         selectByMouse: true
+                        color: "green"
+                        onEditingFinished: {
+                            model.label = todoLabel.text
+                        }
                     }
-//                    MouseArea {
-//                        anchors.fill: todoLabel
-//                        propagateComposedEvents: true
-
-//                        onClicked: {
-//                            console.log ("AAA")
-//                            todoLabel.enabled = true
-//                            itemMouseArea.enabled = false
-//                            this.enabled = false
-//                        }
-//                    }
                 }
 
 
@@ -127,11 +120,16 @@ ListView {
                                 itemMouseArea.enabled = false
                                 todoLabel.readOnly = false
                                 todoDetails.readOnly = false
+                                if (model.details.length === 0) {
+                                    model.details = " "
+                                }
                             } else {
                                 maToDoItemLabel.enabled = true
                                 itemMouseArea.enabled = true
                                 todoLabel.readOnly = true
                                 todoDetails.readOnly = true
+                                model.details = todoDetails.text.trim()
+                                model.label = todoLabel.text.trim()
                             }
                         }
                     }
