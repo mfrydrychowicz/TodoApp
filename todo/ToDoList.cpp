@@ -34,15 +34,17 @@ bool ToDoList::updateItemAt(int index, const ToDoItem &item)
 
 void ToDoList::addItem(QString a_label, QString a_details)
 {
-    emit todoItemAdditionStart();
+    if (a_label.length() > 0) {
+        emit todoItemAdditionStart();
 
-    ToDoItem item;
-    item.done = ToDoItemEnums::ToDoState::PENDING;
-    item.label = a_label;
-    item.details = a_details;
-    m_items.append(item);
+        ToDoItem item;
+        item.done = ToDoItemEnums::ToDoState::PENDING;
+        item.label = a_label;
+        item.details = a_details;
+        m_items.append(item);
 
-    emit todoItemAdditionEnd();
+        emit todoItemAdditionEnd();
+    }
 }
 
 void ToDoList::removeCompletedItem()

@@ -4,6 +4,7 @@ ToDoModel::ToDoModel(QObject *parent)
     : QAbstractListModel(parent)
     , m_items(nullptr)
 {
+
 }
 
 QVariant ToDoModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -92,10 +93,13 @@ bool ToDoModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
 Qt::ItemFlags ToDoModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return Qt::NoItemFlags;
+    Qt::ItemFlags defaultFlags = ToDoModel::flags(index);
 
-    return Qt::ItemIsEditable; // FIXME: Implement me!
+    if (index.isValid())
+        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    else
+        return Qt::ItemIsDropEnabled |  Qt::ItemIsEditable | defaultFlags;
+
 }
 
 QHash<int, QByteArray> ToDoModel::roleNames() const
