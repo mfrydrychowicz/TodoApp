@@ -47,6 +47,22 @@ void ToDoList::addItem(QString a_label, QString a_details)
     }
 }
 
+void ToDoList::dropItem(QString a_label, QString a_details, bool a_done, bool a_isSelected)
+{
+    if (a_label.length() > 0) {
+        emit todoItemAdditionStart();
+
+        ToDoItem item;
+        item.done = static_cast<ToDoItemEnums::ToDoState>(a_done);
+        item.label = a_label;
+        item.details = a_details;
+        item.isSelected = a_isSelected;
+        m_items.append(item);
+
+        emit todoItemAdditionEnd();
+    }
+}
+
 void ToDoList::removeCompletedItem()
 {
     for (int index = 0; index < m_items.size(); ++index) {

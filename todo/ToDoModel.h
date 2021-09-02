@@ -38,11 +38,22 @@ public:
 
     virtual QHash<int, QByteArray> roleNames() const override;
 
+    Qt::DropActions supportedDropActions() const override;
+
+    QStringList mimeTypes() const override;
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    bool dropMimeData(const QMimeData *data,
+                      Qt::DropAction action,
+                      int row,
+                      int column,
+                      const QModelIndex &parent) override;
+    bool removeRows(int row, int count, const QModelIndex &parent) override;
+
     ToDoList *list() const;
     void setList(ToDoList* list);
 
 private:
-    ToDoList *m_items;
+    ToDoList *m_list;
 };
 
 #endif // TODOMODEL_H
