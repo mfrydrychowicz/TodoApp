@@ -5,30 +5,6 @@
 
 ToDoModel::ToDoModel(QObject *parent) : QAbstractListModel(parent), m_list(nullptr) {}
 
-QVariant ToDoModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    switch(section)
-    {
-    case 0:
-        return QString("Student Name"); break;
-
-    case 1:
-        return QString("Number"); break;
-    default:
-        return QVariant(); break;
-    }
-}
-
-bool ToDoModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
-{
-    if (value != headerData(section, orientation, role)) {
-        // FIXME: Implement me!
-        emit headerDataChanged(orientation, section, section);
-        return true;
-    }
-    return false;
-}
-
 int ToDoModel::rowCount(const QModelIndex &parent) const
 {
     // For list models only the root node (an invalid parent) should return the list's size. For all
@@ -207,8 +183,13 @@ bool ToDoModel::removeRows(int row, int count, const QModelIndex &parent)
 
 Q_INVOKABLE bool ToDoModel::removeRow(int row)
 {
-    removeRows(row, 1, QModelIndex());
+    return removeRows(row, 1, QModelIndex());
 }
+
+//Q_INVOKABLE bool ToDoModel::removeRow(int row)
+//{
+//    return removeRows(row, 1, QModelIndex());
+//}
 
 ToDoList *ToDoModel::list() const
 {

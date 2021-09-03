@@ -32,9 +32,10 @@ int main(int argc, char *argv[])
                                          0,
                                          "ToDoList",
                                          QStringLiteral("ToDoList shall not be created in QML"));
-    ToDoList toDoListPending;
-    ToDoList toDoListInProgress;
-    ToDoList toDoListDone;
+    ToDoList toDoListPending = ToDoList(ToDoItemEnums::ToDoState::PENDING);
+    toDoListPending.fillWithDummyData();
+    ToDoList toDoListInProgress = ToDoList(ToDoItemEnums::ToDoState::INPROGRESS);
+    ToDoList toDoListDone = ToDoList(ToDoItemEnums::ToDoState::DONE);
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("toDoListPending"), &toDoListPending);

@@ -20,11 +20,6 @@ public:
         DetailsRole
     };
 
-    // Header:
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole) override;
-
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -40,13 +35,13 @@ public:
 
     Qt::DropActions supportedDropActions() const override;
 
-    QStringList mimeTypes() const override;
-    QMimeData *mimeData(const QModelIndexList &indexes) const override;
-    bool dropMimeData(const QMimeData *data,
-                      Qt::DropAction action,
-                      int row,
-                      int column,
-                      const QModelIndex &parent) override;
+    Q_INVOKABLE QStringList mimeTypes() const override;
+    Q_INVOKABLE QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    Q_INVOKABLE bool dropMimeData(const QMimeData *data,
+                                  Qt::DropAction action,
+                                  int row,
+                                  int column,
+                                  const QModelIndex &parent) override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
     Q_INVOKABLE bool removeRow(int row);
 
