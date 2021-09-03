@@ -238,16 +238,7 @@ ApplicationWindow {
             }
         }
     }
-    //    Pane {
-    //        padding: 10
-    //        anchors.fill:parent
-    //        ColumnLayout {
-    //            anchors.fill:parent
-    //            ToDoList {
-    //                Layout.fillHeight: true
-    //            }
-    //        }
-    //    }
+
 }
 
 /*##^##

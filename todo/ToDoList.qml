@@ -17,8 +17,6 @@ Rectangle {
     DropArea {
         id: dropArea
         anchors { fill: root; margins: 10 }
-
-
         onDropped: (drop) => {
                        if (drop.formats) {
                            if (drop.proposedAction === Qt.MoveAction) {
@@ -64,7 +62,6 @@ Rectangle {
                     height: todoLabel.height
 
                     Item {
-                        id: name
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         TextEdit {
@@ -108,34 +105,55 @@ Rectangle {
 
                         }
 
-                        //                    MouseArea {
-                        //                        id: editButtonMouseArea
-                        //                        anchors.fill: editButton
-                        //                        propagateComposedEvents: true
-                        //                        onClicked: {
-                        //                            editButton.isSelected = !editButton.isSelected
-                        //                            editButton.isVisible = editButton.isSelected
+                        MouseArea {
+                            id: editButtonMouseArea
+                            anchors.fill: editButton
+                            propagateComposedEvents: true
+                            onClicked: {
+                                editButton.isSelected = !editButton.isSelected
+                                editButton.isVisible = editButton.isSelected
 
-                        //                            if (editButton.isSelected) {
-                        //                                maToDoItemLabel.enabled = false
-                        //                                itemMouseArea.enabled = false
-                        //                                todoLabel.readOnly = false
-                        //                                todoDetails.readOnly = false
-                        //                                if (model.details.length === 0) {
-                        //                                    model.details = " "
-                        //                                }
-                        //                            } else {
-                        //                                maToDoItemLabel.enabled = true
-                        //                                itemMouseArea.enabled = true
-                        //                                todoLabel.readOnly = true
-                        //                                todoDetails.readOnly = true
-                        //                                model.details = todoDetails.text.trim()
-                        //                                model.label = todoLabel.text.trim()
-                        //                            }
-                        //                        }
-                        //                    }
+                                if (editButton.isSelected) {
+                                    maToDoItemLabel.enabled = false
+                                    todoItemMouseArea.enabled = false
+                                    todoLabel.readOnly = false
+                                    todoDetails.readOnly = false
+                                    if (model.details.length === 0) {
+                                        model.details = " "
+                                    }
+                                } else {
+                                    maToDoItemLabel.enabled = true
+                                    todoItemMouseArea.enabled = true
+                                    todoLabel.readOnly = true
+                                    todoDetails.readOnly = true
+                                    model.details = todoDetails.text.trim()
+                                    model.label = todoLabel.text.trim()
+                                }
+                            }
+                        }
                     }
 
+                }
+
+                MouseArea {
+                    property alias isEnabled: maToDoItemLabel.enabled
+                    id: maToDoItemLabel
+                    enabled: true
+                    anchors.fill: labelRow
+                    hoverEnabled: true         //this line will enable mouseArea.containsMouse
+                    //                propagateComposedEvents: true
+                    onEntered: {
+                        editButton.isVisible = true
+                    }
+
+                    onExited: {
+                        editButton.isVisible = editButton.isVisible && editButton.isSelected
+                    }
+                    onClicked: {
+                        console.log("Label clicked. Enabled: ", enabled)
+
+                        mouse.accepted = false
+                    }
                 }
 
                 ToolSeparator {
@@ -161,44 +179,32 @@ Rectangle {
                     selectionColor: "limegreen"
                 }
 
-                //            MouseArea {
-                //                id: itemMouseArea
-                //                anchors.fill: parent
-                //                propagateComposedEvents: true
-                //                onDoubleClicked: {
-                //                    model.isSelected = !model.isSelected
-                //                }
-                //                onClicked: {
-                ////                    console.log("TodoItem clicked, mouse event onClicked not accepted")
-                //                    mouse.accepted = false
-                //                }
-                //            }
-
                 MouseArea {
-                    id: mouseArea
+                    id: todoItemMouseArea
                     anchors.fill: parent
-                    drag.target: draggable
-                    onClicked: {
-                        console.log("you clicked")
-                    }
                     propagateComposedEvents: true
-
+                    onDoubleClicked: {
+                        model.isSelected = !model.isSelected
+                    }
+                    onClicked: {
+                        mouse.accepted = false
+                    }
+                    drag.target: draggable
                 }
 
                 Item {
                     id: draggable
                     anchors.fill: parent
-                    Drag.active: mouseArea.drag.active
+                    Drag.active: todoItemMouseArea.drag.active
                     Drag.hotSpot.x: 0
                     Drag.hotSpot.y: 0
-//                    Drag.mimeData: { "text/plain": todoItem.display }
+                    //                    Drag.mimeData: { "text/plain": todoItem.display }
                     Drag.mimeData: {
                         "label": model.label,
                         "details": model.details
                     }
                     Drag.dragType: Drag.Automatic
                     Drag.onDragFinished: (dropAction) => {
-//                                             console.log(`to, here is ${target}`)
                                              if ((dropAction === Qt.MoveAction)) {
                                                  listViewModel.removeRow(model.index)
                                              }
@@ -212,17 +218,6 @@ Rectangle {
                 anchors.fill: todoItem
                 source: todoItem
             }
-
-//            DropShadow {
-//                id: todoItemShadow
-//                anchors.fill: todoItem
-//                horizontalOffset: 0
-//                verticalOffset: 0
-//                radius: 6
-//                color: "lightgray"
-//                source: todoItem
-//                transparentBorder: true
-//            }
 
 
         }
@@ -269,26 +264,7 @@ Rectangle {
 
 
 
-        //    //            MouseArea {
-        //    //                property alias isEnabled: maToDoItemLabel.enabled
-        //    //                id: maToDoItemLabel
-        //    //                enabled: true
-        //    //                anchors.fill: labelRow
-        //    //                hoverEnabled: true         //this line will enable mouseArea.containsMouse
-        //    ////                propagateComposedEvents: true
-        //    //                onEntered: {
-        //    //                    editButton.isVisible = true
-        //    //                }
 
-        //    //                onExited: {
-        //    //                    editButton.isVisible = editButton.isVisible && editButton.isSelected
-        //    //                }
-        //    //                onClicked: {
-        //    //                    console.log("Label clicked. Enabled: ", enabled)
-
-        //    //                    mouse.accepted = false
-        //    //                }
-        //    //            }
 
 
 
