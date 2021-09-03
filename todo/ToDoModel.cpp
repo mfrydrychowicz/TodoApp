@@ -205,6 +205,11 @@ bool ToDoModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+Q_INVOKABLE bool ToDoModel::removeRow(int row)
+{
+    removeRows(row, 1, QModelIndex());
+}
+
 ToDoList *ToDoModel::list() const
 {
     return m_list;

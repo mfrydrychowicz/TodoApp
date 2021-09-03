@@ -49,6 +49,7 @@ void ToDoList::addItem(QString a_label, QString a_details)
 
 void ToDoList::dropItem(QString a_label, QString a_details, bool a_done, bool a_isSelected)
 {
+    qDebug() << "do i even enter here";
     if (a_label.length() > 0) {
         emit todoItemAdditionStart();
 

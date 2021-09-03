@@ -48,6 +48,7 @@ public:
                       int column,
                       const QModelIndex &parent) override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
+    Q_INVOKABLE bool removeRow(int row);
 
     ToDoList *list() const;
     void setList(ToDoList* list);
