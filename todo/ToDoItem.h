@@ -26,12 +26,8 @@ struct ToDoItem
     bool isSelected;
 
     ToDoItem() : isSelected(false){};
-    ToDoItem(ToDoItemEnums::ToDoState a_done, QString a_label, QString a_details)
-        : done {a_done}
-        , label {a_label}
-        , details {a_details}
-        , isSelected{false}
-    {};
+    ToDoItem(QString a_label, QString a_details)
+        : label{a_label}, details{a_details}, isSelected{false} {};
 };
 
 #endif // TODOITEM_H

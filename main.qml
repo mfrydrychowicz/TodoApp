@@ -3,9 +3,10 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Universal 2.12
-//import QtQuick.Controls.Material 2.12
 import Qt5Compat.GraphicalEffects
 import "ToDo"
+
+import "./components"
 
 ApplicationWindow {
     id: mainWindow
@@ -49,146 +50,42 @@ ApplicationWindow {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
 
-                TextField {
+                FormTextField {
                     id: tfTodoTitle
                     Layout.alignment: Qt.AlignHCenter
                     Layout.fillWidth: true
                     placeholderText: qsTr("Enter title")
                     focus: true
-                    background: Rectangle {
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: 3
-                        color: parent.focus ? "green" : "limegreen"
-                        radius: 8
-                        clip: true
-                        antialiasing: true
-                    }
                 }
 
-                TextField {
+                FormTextField {
                     id: tfTodoDetails
                     Layout.alignment: Qt.AlignHCenter
                     Layout.fillWidth: true
                     placeholderText: qsTr("Enter details")
-                    background: Rectangle {
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: 3
-                        color: parent.focus ? "green" : "limegreen"
-                        radius: 8
-                        clip: true
-                        antialiasing: true
-                    }
                 }
 
                 RowLayout {
                     Layout.alignment: Qt.AlignRight
-                    Button {
+                    PrimaryTextButton {
                         text: "Add"
                         onClicked: {
-                            console.log("Add button clicked")
                             toDoListPending.addItem(tfTodoTitle.text, tfTodoDetails.text)
                             addItemPopup.close()
                         }
-                        contentItem: Text {
-                            text: parent.text
-                            font: parent.font
-                            color: "white"
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            elide: Text.ElideRight
-                        }
-                        background: Rectangle {
-                            color: parent.down ? "limegreen" : "green"
-                            border.color: "transparent"
-                            border.width: 1
-                            radius: 5
-                        }
-
                     }
-                    Button {
+                    SecondaryTextButton {
                         text: "Cancel"
                         onClicked: {
                             addItemPopup.close()
                         }
-                        contentItem: Text {
-                            text: parent.text
-                            font: parent.font
-                            color: parent.down ? "limegreen" : "green"
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            elide: Text.ElideRight
-                        }
-                        background: Rectangle {
-                            opacity: enabled ? 1 : 0.3
-                            border.color: parent.down ? "limegreen" : "green"
-                            border.width: 1
-                            radius: 5
-                        }
                     }
                 }
             }
         }
     }
 
-    header: ToolBar {
-        id: headerToolbar
-        Layout.fillWidth: true
-        height: 50
-        background: Rectangle {
-            color: Universal.color(Universal.Emerald)
-            opacity: 0.7
-        }
-
-        RowLayout {
-            spacing: 10
-            anchors {
-                leftMargin: 10
-                left: parent.left
-                verticalCenter: parent.verticalCenter
-            }
-            Text {
-                id: applicationName
-                text: "Todo application"
-                color: "white"
-                font.bold: true
-            }
-        }
-        RowLayout {
-            spacing: 10
-            anchors {
-                rightMargin: 10
-                leftMargin: 10
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-            }
-            implicitWidth: addButton.implicitWidth + deleteButton.implicitWidth + 10
-
-            RoundButton {
-                id: addButton
-                display: AbstractButton.IconOnly
-                icon.source: "qrc:///icons/images/baseline_add_black_20.png"
-                icon.color: "white"
-                onClicked: addItemPopup.open()
-            }
-
-
-            RoundButton {
-                id: deleteButton
-                display: AbstractButton.IconOnly
-                icon.source: "qrc:///icons/images/baseline_delete_black_20.png"
-                icon.color: "white"
-                onClicked:  {
-                    toDoListPending.removeSelectedItems()
-                    toDoListInProgress.removeSelectedItems()
-                    toDoListDone.removeSelectedItems()
-                }
-            }
-        }
-    }
+    header: HeaderToolbar{}
 
     Item {
         anchors.fill:parent
@@ -241,15 +138,12 @@ ApplicationWindow {
 
 
                 }
-                DropShadow {
+
+                Shadow {
                     anchors.fill: pendingColumnBorder
-                    horizontalOffset: 0
-                    verticalOffset: 0
-                    radius: 6
-                    color: "lightgray"
                     source: pendingColumnBorder
-                    transparentBorder: true
                 }
+
             }
             Item {
                 Layout.preferredWidth: parent.width / 3
@@ -290,14 +184,10 @@ ApplicationWindow {
                         }
                     }
                 }
-                DropShadow {
+
+                Shadow {
                     anchors.fill: inProgressColumnBorder
-                    horizontalOffset: 0
-                    verticalOffset: 0
-                    radius: 6
-                    color: "lightgray"
                     source: inProgressColumnBorder
-                    transparentBorder: true
                 }
             }
             Item {
@@ -340,28 +230,15 @@ ApplicationWindow {
                         }
                     }
                 }
-                DropShadow {
+
+                Shadow {
                     anchors.fill: doneColumnBorder
-                    horizontalOffset: 0
-                    verticalOffset: 0
-                    radius: 6
-                    color: "lightgray"
                     source: doneColumnBorder
-                    transparentBorder: true
                 }
             }
         }
     }
-    //    Pane {
-    //        padding: 10
-    //        anchors.fill:parent
-    //        ColumnLayout {
-    //            anchors.fill:parent
-    //            ToDoList {
-    //                Layout.fillHeight: true
-    //            }
-    //        }
-    //    }
+
 }
 
 /*##^##

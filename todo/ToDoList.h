@@ -10,13 +10,16 @@ class ToDoList : public QObject
 {
     Q_OBJECT
 public:
-    explicit ToDoList(QObject *parent = nullptr);
+    explicit ToDoList(ToDoItemEnums::ToDoState state, QObject *parent = nullptr);
+    void fillWithDummyData();
     QVector<ToDoItem> getItems() const;
     bool updateItemAt(int index, const ToDoItem &item);
+    void dropItem(QString a_label, QString a_details, bool a_done, bool a_isSelected);
+
+    QVector<ToDoItem> m_items;
+    ToDoItemEnums::ToDoState m_state;
 
 private:
-    QVector<ToDoItem> m_items;
-
 signals:
     void todoItemAdditionStart();
     void todoItemAdditionEnd();
@@ -25,7 +28,6 @@ signals:
 
 public slots:
     void addItem(QString a_label, QString a_details);
-    void removeCompletedItem();
     void removeSelectedItems();
 };
 

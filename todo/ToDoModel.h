@@ -13,17 +13,7 @@ class ToDoModel : public QAbstractListModel
 public:
     explicit ToDoModel(QObject *parent = nullptr);
 
-    enum {
-        IsSelectedRole = Qt::UserRole + 1,
-        DoneRole,
-        LabelRole,
-        DetailsRole
-    };
-
-    // Header:
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole) override;
+    enum { IsSelectedRole = Qt::UserRole + 1, LabelRole, DetailsRole };
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -38,11 +28,14 @@ public:
 
     virtual QHash<int, QByteArray> roleNames() const override;
 
+    bool removeRows(int row, int count, const QModelIndex &parent) override;
+    Q_INVOKABLE bool removeRow(int row);
+
     ToDoList *list() const;
     void setList(ToDoList* list);
 
 private:
-    ToDoList *m_items;
+    ToDoList *m_list;
 };
 
 #endif // TODOMODEL_H
