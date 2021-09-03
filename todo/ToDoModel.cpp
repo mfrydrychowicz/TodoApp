@@ -24,8 +24,6 @@ QVariant ToDoModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case IsSelectedRole:
         return QVariant(item.isSelected);
-    case DoneRole:
-        return QVariant::fromValue(item.done);
     case DetailsRole:
         return QVariant(item.details);
     case LabelRole:
@@ -42,9 +40,6 @@ bool ToDoModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
     ToDoItem item = m_list->getItems().at(index.row());
     switch (role) {
-    case DoneRole:
-        item.done = qvariant_cast<ToDoItemEnums::ToDoState>(value);
-        break;
     case IsSelectedRole:
         item.isSelected = value.toBool();
         qDebug() << "now value item.isSelected " << value.toBool();
@@ -78,85 +73,10 @@ Qt::ItemFlags ToDoModel::flags(const QModelIndex &index) const
 QHash<int, QByteArray> ToDoModel::roleNames() const
 {
     QHash<int, QByteArray> names;
-    names[DoneRole] = "done";
     names[DetailsRole] = "details";
     names[LabelRole] = "label";
     names[IsSelectedRole] = "isSelected";
     return names;
-}
-
-Qt::DropActions ToDoModel::supportedDropActions() const
-{
-    return Qt::MoveAction;
-}
-
-QStringList ToDoModel::mimeTypes() const
-{
-    QStringList types;
-    types << "application/todoitem.list";
-    return types;
-}
-
-QMimeData *ToDoModel::mimeData(const QModelIndexList &indexes) const
-{
-    QMimeData *mimeData = new QMimeData();
-    QByteArray encodedData;
-
-    QDataStream stream(&encodedData, QIODevice::WriteOnly);
-
-    foreach (QModelIndex index, indexes) {
-        if (index.isValid()) {
-            QString label = data(index, DoneRole).toString();
-            QString details = data(index, DetailsRole).toString();
-            bool isSelected = data(index, IsSelectedRole).toBool();
-            bool done = data(index, DoneRole).toBool();
-            stream << label << details << isSelected << done;
-        }
-    }
-
-    mimeData->setData("application/todoitem.list", encodedData);
-    return mimeData;
-}
-
-bool ToDoModel::dropMimeData(
-    const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
-{
-    if (action == Qt::IgnoreAction)
-        return true;
-
-    if (!data->hasFormat("application/todoitem.list"))
-        return false;
-
-    if (column > 0)
-        return false;
-
-    int beginRow;
-
-    //    if (row != -1)
-    //        beginRow = row;
-    //    else if (parent.isValid())
-    //        beginRow = parent.row();
-    //    else
-    //        beginRow = m_items->getItems().size();
-
-    QByteArray encodedData = data->data("application/todoitem.list");
-    QDataStream stream(&encodedData, QIODevice::ReadOnly);
-
-    int rows = 0;
-
-    while (!stream.atEnd()) {
-        QString label;
-        QString details;
-        bool isSelected;
-        bool done;
-        stream >> done;
-        stream >> isSelected;
-        stream >> details;
-        stream >> label;
-        m_list->dropItem(label, details, isSelected, done);
-    }
-
-    return true;
 }
 
 bool ToDoModel::removeRows(int row, int count, const QModelIndex &parent)
@@ -181,15 +101,10 @@ bool ToDoModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
-Q_INVOKABLE bool ToDoModel::removeRow(int row)
+bool ToDoModel::removeRow(int row)
 {
     return removeRows(row, 1, QModelIndex());
 }
-
-//Q_INVOKABLE bool ToDoModel::removeRow(int row)
-//{
-//    return removeRows(row, 1, QModelIndex());
-//}
 
 ToDoList *ToDoModel::list() const
 {

@@ -3,5 +3,12 @@
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>ToDo/ToDoList.qml</file>
+        <file>components/AddNewItemPopup.qml</file>
+        <file>components/Shadow.qml</file>
+        <file>components/RoundIconButton.qml</file>
+        <file>components/HeaderToolbar.qml</file>
+        <file>components/PrimaryTextButton.qml</file>
+        <file>components/SecondaryTextButton.qml</file>
+        <file>components/FormTextField.qml</file>
     </qresource>
 </RCC>

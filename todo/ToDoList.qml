@@ -8,11 +8,10 @@ import Qt5Compat.GraphicalEffects
 import ToDoModel 1.0
 import todo.ToDoItem 1.0
 
+import "../components"
 
 Rectangle {
     id: root
-
-
     property alias list : listViewModel.list
 
     DropArea {
@@ -21,7 +20,6 @@ Rectangle {
 
 
         onDropped: (drop) => {
-                       console.log("dropped: ", drop.getDataAsString("label"), drop.getDataAsString("details"))
                        if (drop.formats) {
                            if (drop.proposedAction === Qt.MoveAction) {
                                list.addItem(drop.getDataAsString("label"), drop.getDataAsString("details"))
@@ -208,16 +206,23 @@ Rectangle {
                 }
             }
 
-            DropShadow {
+
+            Shadow {
                 id: todoItemShadow
                 anchors.fill: todoItem
-                horizontalOffset: 0
-                verticalOffset: 0
-                radius: 6
-                color: "lightgray"
                 source: todoItem
-                transparentBorder: true
             }
+
+//            DropShadow {
+//                id: todoItemShadow
+//                anchors.fill: todoItem
+//                horizontalOffset: 0
+//                verticalOffset: 0
+//                radius: 6
+//                color: "lightgray"
+//                source: todoItem
+//                transparentBorder: true
+//            }
 
 
         }

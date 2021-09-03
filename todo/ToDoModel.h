@@ -13,12 +13,7 @@ class ToDoModel : public QAbstractListModel
 public:
     explicit ToDoModel(QObject *parent = nullptr);
 
-    enum {
-        IsSelectedRole = Qt::UserRole + 1,
-        DoneRole,
-        LabelRole,
-        DetailsRole
-    };
+    enum { IsSelectedRole = Qt::UserRole + 1, LabelRole, DetailsRole };
 
     // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -33,15 +28,6 @@ public:
 
     virtual QHash<int, QByteArray> roleNames() const override;
 
-    Qt::DropActions supportedDropActions() const override;
-
-    Q_INVOKABLE QStringList mimeTypes() const override;
-    Q_INVOKABLE QMimeData *mimeData(const QModelIndexList &indexes) const override;
-    Q_INVOKABLE bool dropMimeData(const QMimeData *data,
-                                  Qt::DropAction action,
-                                  int row,
-                                  int column,
-                                  const QModelIndex &parent) override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
     Q_INVOKABLE bool removeRow(int row);
 
