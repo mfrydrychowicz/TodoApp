@@ -40,7 +40,7 @@ Rectangle {
                 width: parent.width
                 contentHeight: calculateHeight()
                 function calculateHeight() {
-                    var height = labelRow.implicitHeight //+ 20
+                    var height = todoLabel.implicitHeight //+ 20
                     console.log(model.label, model.done) // why sometimes undefined undefined?
                     if (model.details && model.details.length > 0) {
                         height = height + todoDetails.implicitHeight + separator.implicitHeight //+ 30
@@ -59,7 +59,7 @@ Rectangle {
                     id: labelRow
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    height: todoLabel.height
+                    height: todoLabel.implicitHeight
 
                     Item {
                         Layout.fillWidth: true
@@ -67,6 +67,7 @@ Rectangle {
                         TextEdit {
                             id: todoLabel
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                            anchors.fill: parent
                             text: model.label
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                             selectedTextColor: "white"
@@ -218,63 +219,7 @@ Rectangle {
                 anchors.fill: todoItem
                 source: todoItem
             }
-
-
         }
-        //![3]
-        //        MouseArea {
-        //            id: dragArea
-
-        //            property bool held: false
-        //            onPressAndHold: held = true
-        //            onReleased: held = false
-        //            anchors.fill: parent
-        //            drag.target: held ? todoItem : undefined
-        //            drag.axis: Drag.YAxis
-
-        //            DropArea {
-        //                anchors { fill: parent; margins: 10 }
-
-        //                onEntered: {
-        //                    model.items.move(
-        //                            drag.source.DelegateModel.itemsIndex,
-        //                            dragArea.DelegateModel.itemsIndex)
-        //                }
-        //            }
-
-        //            Pane {
-        //                id: todoItem
-        //                width: parent.width
-        //                contentHeight: calculateHeight()
-        //                function calculateHeight() {
-        //                    var height = labelRow.implicitHeight //+ 20
-        //                    //                console.log(model.label, model.done) // why sometimes undefined undefined?
-        //                    if (model.details && model.details.length > 0) {
-        //                        height = height + todoDetails.implicitHeight + separator.implicitHeight //+ 30
-        //                    }
-        //                    return height
-        //                }
-
-        //                background: Rectangle {
-        //                    id: paneBackground
-        //                    border.width: 1
-        //                    radius: 5
-        //                    border.color: model.isSelected ? "limegreen" : "white"
-        //                }
-
-
-
-
-
-
-
-
-
-        //            }
-
-
-        //        }
-        //        }
     }
 
 
