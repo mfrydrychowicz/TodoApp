@@ -1,6 +1,5 @@
 ### To do app written in Qt
-Ok so this is an app written in Qt where you can add some Todo items. It does not save data anywhere. Maybe someday it will. Or not. Who knows. 
-
+Ok so this is an app written in Qt where you can add some Todo items. It does save data to files. 
 #### Features?
 You may ask. It can do several things:
 * [add new item with or without description](#adding-item),
