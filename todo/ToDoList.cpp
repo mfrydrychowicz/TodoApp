@@ -1,17 +1,24 @@
 #include "ToDoList.h"
 #include <QDebug>
-
-ToDoList::ToDoList(ToDoItemEnums::ToDoState state, QObject *parent)
-    : QObject(parent), m_state{state}
+#include <QVector>
+ToDoList::ToDoList(ToDoItemEnums::ToDoState state, DataFile &datafile, QObject *parent)
+    : QObject(parent), m_state{state}, m_datafile{datafile}
 {
+    QString filename = "todoitems_" + QString::number(static_cast<int>(m_state)) + ".dat";
+    m_datafile.setFilename(filename);
+    m_datafile.readData(m_items);
+}
 
+ToDoList::~ToDoList()
+{
+    m_datafile.saveData(m_items);
 }
 
 void ToDoList::fillWithDummyData()
 {
-    m_items.append({QStringLiteral("Email"), QStringLiteral("Email X company to regarding Y")});
-    m_items.append({QStringLiteral("Wash Dishes"), QLatin1String("")});
-    m_items.append({QStringLiteral("Read 1h"), QLatin1String("")});
+    m_items.push_back({QStringLiteral("Email"), QStringLiteral("Email X company to regarding Y")});
+    m_items.push_back({QStringLiteral("Wash Dishes"), QLatin1String("")});
+    m_items.push_back({QStringLiteral("Read 1h"), QLatin1String("")});
 }
 
 QVector<ToDoItem> ToDoList::getItems() const

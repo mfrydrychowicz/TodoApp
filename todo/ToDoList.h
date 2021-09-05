@@ -1,6 +1,7 @@
 #ifndef TODOLIST_H
 #define TODOLIST_H
 
+#include "Datafile.h"
 #include <QObject>
 #include <QVector>
 
@@ -10,7 +11,8 @@ class ToDoList : public QObject
 {
     Q_OBJECT
 public:
-    explicit ToDoList(ToDoItemEnums::ToDoState state, QObject *parent = nullptr);
+    explicit ToDoList(ToDoItemEnums::ToDoState state, DataFile &datafile, QObject *parent = nullptr);
+    ~ToDoList();
     void fillWithDummyData();
     QVector<ToDoItem> getItems() const;
     bool updateItemAt(int index, const ToDoItem &item);
@@ -18,6 +20,7 @@ public:
 
     QVector<ToDoItem> m_items;
     ToDoItemEnums::ToDoState m_state;
+    DataFile m_datafile;
 
 private:
 signals:

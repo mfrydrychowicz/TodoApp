@@ -34,6 +34,10 @@ set(PROJECT_SOURCES
         todo/ToDoList.cpp
         todo/ToDoList.h
         todo/ToDoItem.h
+        todo/Serializable.h
+        todo/Serializable.cpp
+        todo/Datafile.h
+        todo/Datafile.cpp
         qml.qrc
         icons.qrc
         fonts.qrc

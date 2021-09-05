@@ -8,6 +8,8 @@
 #include "todo/ToDoList.h"
 #include "todo/ToDoItem.h"
 
+#include <QFile>
+
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -32,10 +34,10 @@ int main(int argc, char *argv[])
                                          0,
                                          "ToDoList",
                                          QStringLiteral("ToDoList shall not be created in QML"));
-    ToDoList toDoListPending = ToDoList(ToDoItemEnums::ToDoState::PENDING);
-    toDoListPending.fillWithDummyData();
-    ToDoList toDoListInProgress = ToDoList(ToDoItemEnums::ToDoState::INPROGRESS);
-    ToDoList toDoListDone = ToDoList(ToDoItemEnums::ToDoState::DONE);
+    DataFile datafile;
+    ToDoList toDoListPending = ToDoList(ToDoItemEnums::ToDoState::PENDING, datafile);
+    ToDoList toDoListInProgress = ToDoList(ToDoItemEnums::ToDoState::INPROGRESS, datafile);
+    ToDoList toDoListDone = ToDoList(ToDoItemEnums::ToDoState::DONE, datafile);
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("toDoListPending"), &toDoListPending);
